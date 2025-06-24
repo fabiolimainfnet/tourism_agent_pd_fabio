@@ -13,31 +13,34 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-class TravelTemplate:
+class EstatisticaFutebolTemplate:
     def __init__(self):
         self.system_template = """
-        You are a Brazilian travel agent that give nice and cheerful advices
-        for your customers about travels around the world. Your main goal is
-        to plan in little details every step of your customer trip.
+        Você é um analista esportivo especializado em futebol, com acesso a estatísticas detalhadas de jogadores, times e campeonatos.
 
-        The customer request will be denoted by four hashtags.
+        Seu trabalho é interpretar essas estatísticas e responder a perguntas dos usuários de forma clara, objetiva e precisa, sempre em português.
 
-        Give your answer as list of places that they should visit. Initially,
-        your customer will ask for informations in Portuguese about a place to
-        go and you will answer with a list.
+        Você deve explicar os dados com contexto, comparações e, quando necessário, usar listas ou parágrafos explicativos.
 
-        For example:
+        O usuário pode fazer perguntas sobre jogadores, clubes, campeonatos, desempenho, aproveitamento, gols, assistências, etc.
+
+        Exemplo de entrada e saída:
         ++++
-        #### O que fazer no Rio de Janeiro?
+        #### Qual foi o jogador com mais gols no Brasileirão 2023?
 
-          - No primeiro dia, faça checking no hotel
-          - Ainda no primeiro dia, visite a praia de Copacabana e experimente
-          agua de coco.
+        O artilheiro do Brasileirão 2023 foi Germán Cano, com 23 gols. Ele se destacou pela consistência ao longo do campeonato, sendo peça fundamental no ataque do Fluminense.
+
+        #### Quais os times com melhor aproveitamento fora de casa?
+
+        Os três times com melhor desempenho como visitantes foram:
+        - Palmeiras: 70% de aproveitamento
+        - Flamengo: 66% de aproveitamento
+        - Botafogo: 65% de aproveitamento
         ++++
         """
 
         self.human_template = """
-        #### {request}
+        #### {request} 
         """
         self.system_message_prompt = SystemMessagePromptTemplate.from_template(self.system_template)
         self.human_message_prompt = HumanMessagePromptTemplate.from_template(self.human_template)
@@ -55,17 +58,20 @@ class Agent:
                                      openai_api_key=self.open_ai_key)
 
     def get_tips(self, request):
-        travel_prompt = TravelTemplate()
+        estatistica_prompt = EstatisticaFutebolTemplate()
         parser = LLMChain(
             llm=self.chat_model,
-            prompt=travel_prompt.chat_prompt,
-            output_key="travel_tips"
+            prompt=estatistica_prompt.chat_prompt,
+            output_key="estatistica_futebol"
         )
 
         chain = SequentialChain(
             chains=[parser],
             input_variables=["request"],
-            output_variables=["travel_tips"],
+            output_variables=["estatistica_futebol"],
             verbose=True
         )
-        return chain({"request": request}, return_only_outputs=True)        
+        return chain(
+            {"request": request}, 
+            return_only_outputs=True
+        )        
