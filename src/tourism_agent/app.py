@@ -21,7 +21,7 @@ with col1:
       container =st.empty()
       container.header("Resposta")
       
-
+ 
 if button:
    if request:
       itinerary = agent.get_tips(request)
