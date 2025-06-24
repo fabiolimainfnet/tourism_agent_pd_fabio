@@ -1,0 +1,22 @@
+# Ambientes virtuais
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# VS Code
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Streamlit
+.streamlit/
+
+# Logs e arquivos do sistema
+*.log
+.DS_Store
+Thumbs.db
